@@ -8,14 +8,14 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[birthDate]]`birthDate`|`Number (Long)`|-
-|[[email]]`email`|`String`|-
-|[[id]]`id`|`String`|-
-|[[phone]]`phone`|`String`|-
-|[[username]]`username`|`String`|-
+|[[birthDate]]`@birthDate`|`Number (Long)`|-
+|[[email]]`@email`|`String`|-
+|[[id]]`@id`|`String`|-
+|[[phone]]`@phone`|`String`|-
+|[[username]]`@username`|`String`|-
 |===
 

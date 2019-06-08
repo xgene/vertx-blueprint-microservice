@@ -59,7 +59,7 @@ public class RestProductAPIVerticle extends RestAPIVerticle {
     // create HTTP server and publish REST service
     createHttpServer(router, host, port)
       .compose(serverCreated -> publishHttpEndpoint(SERVICE_NAME, host, port))
-      .setHandler(future.completer());
+      .setHandler(future);
   }
 
   private void apiAdd(RoutingContext context) {

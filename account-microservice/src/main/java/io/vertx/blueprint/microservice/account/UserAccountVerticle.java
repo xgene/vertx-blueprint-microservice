@@ -6,6 +6,7 @@ import io.vertx.blueprint.microservice.common.BaseMicroserviceVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
 import io.vertx.serviceproxy.ProxyHelper;
+import io.vertx.serviceproxy.ServiceBinder;
 
 import static io.vertx.blueprint.microservice.account.AccountService.SERVICE_ADDRESS;
 import static io.vertx.blueprint.microservice.account.AccountService.SERVICE_NAME;
@@ -27,18 +28,20 @@ public class UserAccountVerticle extends BaseMicroserviceVerticle {
     // create the service instance
     accountService = new JdbcAccountServiceImpl(vertx, config());
     // register the service proxy on event bus
-    ProxyHelper.registerService(AccountService.class, vertx, accountService, SERVICE_ADDRESS);
+    ServiceBinder serviceBinder = new ServiceBinder(vertx);
+    serviceBinder.setAddress(SERVICE_ADDRESS).register(AccountService.class,  accountService);
+   // ProxyHelper.registerService(AccountService.class, vertx, accountService, SERVICE_ADDRESS);
     // publish the service and REST endpoint in the discovery infrastructure
     publishEventBusService(SERVICE_NAME, SERVICE_ADDRESS, AccountService.class)
       .compose(servicePublished -> deployRestVerticle())
-      .setHandler(future.completer());
+      .setHandler(future);
   }
 
   private Future<Void> deployRestVerticle() {
     Future<String> future = Future.future();
     vertx.deployVerticle(new RestUserAccountAPIVerticle(accountService),
       new DeploymentOptions().setConfig(config()),
-      future.completer());
+      future);
     return future.map(r -> null);
   }
 }

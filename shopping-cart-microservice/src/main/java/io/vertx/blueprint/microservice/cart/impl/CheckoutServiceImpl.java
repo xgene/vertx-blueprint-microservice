@@ -131,7 +131,7 @@ public class CheckoutServiceImpl implements CheckoutService {
     Future<HttpClient> future = Future.future();
     HttpEndpoint.getClient(discovery,
       new JsonObject().put("name", "inventory-rest-api"),
-      future.completer());
+      future);
     return future;
   }
 

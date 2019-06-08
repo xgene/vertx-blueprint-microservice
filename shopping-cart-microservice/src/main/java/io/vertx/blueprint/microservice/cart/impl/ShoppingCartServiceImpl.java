@@ -140,7 +140,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
    */
   private Future<ProductService> getProductService() {
     Future<ProductService> future = Future.future();
-    EventBusService.getProxy(discovery, ProductService.class, future.completer());
+    EventBusService.getProxy(discovery, ProductService.class, future);
     return future;
   }
 }

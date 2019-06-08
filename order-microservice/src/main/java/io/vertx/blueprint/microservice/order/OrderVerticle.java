@@ -6,6 +6,7 @@ import io.vertx.blueprint.microservice.order.impl.OrderServiceImpl;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
 import io.vertx.serviceproxy.ProxyHelper;
+import io.vertx.serviceproxy.ServiceBinder;
 
 import static io.vertx.blueprint.microservice.order.OrderService.*;
 
@@ -22,18 +23,20 @@ public class OrderVerticle extends BaseMicroserviceVerticle {
   public void start(Future<Void> future) throws Exception {
     super.start();
     this.orderService = new OrderServiceImpl(vertx, config());
-    ProxyHelper.registerService(OrderService.class, vertx, orderService, SERVICE_ADDRESS);
+//    ProxyHelper.registerService(OrderService.class, vertx, orderService, SERVICE_ADDRESS);
+    ServiceBinder serviceBinder = new ServiceBinder(vertx);
+    serviceBinder.setAddress(SERVICE_ADDRESS).register(OrderService.class, orderService);
 
     initOrderDatabase()
       .compose(databaseOkay -> publishEventBusService(SERVICE_NAME, SERVICE_ADDRESS, OrderService.class))
       .compose(servicePublished -> prepareDispatcher())
       .compose(dispatcherPrepared -> deployRestVerticle())
-      .setHandler(future.completer());
+      .setHandler(future);
   }
 
   private Future<Void> initOrderDatabase() {
     Future<Void> initFuture = Future.future();
-    orderService.initializePersistence(initFuture.completer());
+    orderService.initializePersistence(initFuture);
     return initFuture;
   }
 
@@ -41,7 +44,7 @@ public class OrderVerticle extends BaseMicroserviceVerticle {
     Future<String> future = Future.future();
     vertx.deployVerticle(new RawOrderDispatcher(orderService),
       new DeploymentOptions().setConfig(config()),
-      future.completer());
+      future);
     return future.map(r -> null);
   }
 
@@ -49,7 +52,7 @@ public class OrderVerticle extends BaseMicroserviceVerticle {
     Future<String> future = Future.future();
     vertx.deployVerticle(new RestOrderAPIVerticle(orderService),
       new DeploymentOptions().setConfig(config()),
-      future.completer());
+      future);
     return future.map(r -> null);
   }
 }

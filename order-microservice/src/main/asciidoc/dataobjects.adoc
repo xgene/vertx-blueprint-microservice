@@ -8,12 +8,12 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[message]]`message`|`String`|-
-|[[order]]`order`|`link:dataobjects.html#Order[Order]`|-
+|[[message]]`@message`|`String`|-
+|[[order]]`@order`|`link:dataobjects.html#Order[Order]`|-
 |===
 
 [[Order]]
@@ -24,15 +24,15 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[buyerId]]`buyerId`|`String`|-
-|[[createTime]]`createTime`|`Number (Long)`|-
-|[[orderId]]`orderId`|`Number (Long)`|-
-|[[payId]]`payId`|`String`|-
-|[[products]]`products`|`Array of link:dataobjects.html#ProductTuple[ProductTuple]`|-
-|[[totalPrice]]`totalPrice`|`Number (Double)`|-
+|[[buyerId]]`@buyerId`|`String`|-
+|[[createTime]]`@createTime`|`Number (Long)`|-
+|[[orderId]]`@orderId`|`Number (Long)`|-
+|[[payId]]`@payId`|`String`|-
+|[[products]]`@products`|`Array of link:dataobjects.html#ProductTuple[ProductTuple]`|-
+|[[totalPrice]]`@totalPrice`|`Number (Double)`|-
 |===
 

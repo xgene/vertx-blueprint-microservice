@@ -44,7 +44,7 @@ public class RestStoreAPIVerticle extends RestAPIVerticle {
 
     createHttpServer(router, host, port)
       .compose(serverCreated -> publishHttpEndpoint(SERVICE_NAME, host, port))
-      .setHandler(future.completer());
+      .setHandler(future);
   }
 
   private void apiSave(RoutingContext context) {

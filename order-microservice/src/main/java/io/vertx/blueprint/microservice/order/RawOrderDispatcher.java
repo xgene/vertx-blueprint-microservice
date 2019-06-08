@@ -92,7 +92,7 @@ public class RawOrderDispatcher extends BaseMicroserviceVerticle {
     Future<HttpClient> clientFuture = Future.future();
     HttpEndpoint.getClient(discovery,
       new JsonObject().put("name", "inventory-rest-api"),
-      clientFuture.completer());
+      clientFuture);
     // modify the inventory changes via REST API
     return clientFuture.compose(client -> {
       List<Future> futures = order.getProducts()

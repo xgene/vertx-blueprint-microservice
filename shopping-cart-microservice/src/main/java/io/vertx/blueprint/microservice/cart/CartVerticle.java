@@ -6,6 +6,7 @@ import io.vertx.blueprint.microservice.common.BaseMicroserviceVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
 import io.vertx.serviceproxy.ProxyHelper;
+import io.vertx.serviceproxy.ServiceBinder;
 
 /**
  * Shopping cart verticle.
@@ -25,8 +26,11 @@ public class CartVerticle extends BaseMicroserviceVerticle {
     this.shoppingCartService = new ShoppingCartServiceImpl(vertx, discovery, config());
     this.checkoutService = CheckoutService.createService(vertx, discovery);
     // register the service proxy on event bus
-    ProxyHelper.registerService(CheckoutService.class, vertx, checkoutService, CheckoutService.SERVICE_ADDRESS);
-    ProxyHelper.registerService(ShoppingCartService.class, vertx, shoppingCartService, ShoppingCartService.SERVICE_ADDRESS);
+//    ProxyHelper.registerService(CheckoutService.class, vertx, checkoutService, CheckoutService.SERVICE_ADDRESS);
+//    ProxyHelper.registerService(ShoppingCartService.class, vertx, shoppingCartService, ShoppingCartService.SERVICE_ADDRESS);
+
+    (new ServiceBinder(vertx)).setAddress(CheckoutService.SERVICE_ADDRESS).register(CheckoutService.class, checkoutService);
+    (new ServiceBinder(vertx)).setAddress(ShoppingCartService.SERVICE_ADDRESS).register(ShoppingCartService.class, shoppingCartService);
 
     // publish the service in the discovery infrastructure
     publishEventBusService(CheckoutService.SERVICE_NAME, CheckoutService.SERVICE_ADDRESS, CheckoutService.class)
@@ -44,7 +48,7 @@ public class CartVerticle extends BaseMicroserviceVerticle {
     Future<String> future = Future.future();
     vertx.deployVerticle(new RestShoppingAPIVerticle(shoppingCartService, checkoutService),
       new DeploymentOptions().setConfig(config()),
-      future.completer());
+      future);
     return future.map(r -> null);
   }
 

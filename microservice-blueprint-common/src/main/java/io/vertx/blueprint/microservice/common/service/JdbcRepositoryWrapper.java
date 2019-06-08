@@ -176,7 +176,7 @@ public class JdbcRepositoryWrapper {
 
   protected Future<SQLConnection> getConnection() {
     Future<SQLConnection> future = Future.future();
-    client.getConnection(future.completer());
+    client.getConnection(future);
     return future;
   }
 

@@ -53,7 +53,7 @@ public class RestShoppingAPIVerticle extends RestAPIVerticle {
     // create http server for the REST service
     createHttpServer(router, host, port)
       .compose(serverCreated -> publishHttpEndpoint(SERVICE_NAME, host, port))
-      .setHandler(future.completer());
+      .setHandler(future);
   }
 
   private void apiCheckout(RoutingContext context, JsonObject principle) {

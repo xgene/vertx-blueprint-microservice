@@ -6,6 +6,7 @@ import io.vertx.blueprint.microservice.store.impl.StoreCRUDServiceImpl;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
 import io.vertx.serviceproxy.ProxyHelper;
+import io.vertx.serviceproxy.ServiceBinder;
 
 import static io.vertx.blueprint.microservice.store.StoreCRUDService.SERVICE_ADDRESS;
 import static io.vertx.blueprint.microservice.store.StoreCRUDService.SERVICE_NAME;
@@ -24,18 +25,19 @@ public class StoreVerticle extends BaseMicroserviceVerticle {
     super.start();
 
     crudService = new StoreCRUDServiceImpl(vertx, config());
-    ProxyHelper.registerService(StoreCRUDService.class, vertx, crudService, SERVICE_ADDRESS);
+    //ProxyHelper.registerService(StoreCRUDService.class, vertx, crudService, SERVICE_ADDRESS);
+    new ServiceBinder(vertx).setAddress(SERVICE_ADDRESS).register(StoreCRUDService.class, crudService);
     // publish service and deploy REST verticle
     publishEventBusService(SERVICE_NAME, SERVICE_ADDRESS, StoreCRUDService.class)
       .compose(servicePublished -> deployRestVerticle(crudService))
-      .setHandler(future.completer());
+      .setHandler(future);
   }
 
   private Future<Void> deployRestVerticle(StoreCRUDService service) {
     Future<String> future = Future.future();
     vertx.deployVerticle(new RestStoreAPIVerticle(service),
       new DeploymentOptions().setConfig(config()),
-      future.completer());
+      future);
     return future.map(r -> null);
   }
 }
